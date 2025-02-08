@@ -1,24 +1,44 @@
 package com.edigest.dayamJournalApp.entry;
 
-public class JournalEntry {
-    public long id;
-    public String tittle;
-    public String content;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-    public long getId() {
+import java.time.LocalDateTime;
+
+@Document(collection = "journal_entries")
+public class JournalEntry {
+    @Id
+    private ObjectId id;
+    private String title;
+    private String content;
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+    private LocalDateTime date;
+
+
+
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
-    public String getTittle() {
-        return tittle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTittle(String tittle) {
-        this.tittle = tittle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {
