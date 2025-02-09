@@ -2,6 +2,7 @@ package com.edigest.dayamJournalApp.controller;
 
 import com.edigest.dayamJournalApp.entry.JournalEntry;
 import com.edigest.dayamJournalApp.services.JounrnalEnrtyService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,18 +30,27 @@ public class JournalEntryControllerV2 {
         return true;
     }
 
-    //    @GetMapping("id/{myId}")
-//    public JournalEntry getJournalEntryById(@PathVariable Long myId){
-//        return null;
-//    }
+        @GetMapping("id/{myId}")
+    public JournalEntry getJournalEntryById(@PathVariable ObjectId myId){
+       return jounrnalEnrtyService.findById(myId).orElse(null) ;
+    }
     @DeleteMapping("id/{myId}")
-    public JournalEntry deleteJournalEntries(@PathVariable Long myId) {
-        return null;
+    public boolean deleteJournalEntries(@PathVariable ObjectId myId) {
+        jounrnalEnrtyService.deleteById(myId);
+        return true;
     }
 
     @PutMapping("/id/{id}")
-    public JournalEntry updateJournalById(@PathVariable Long id, @RequestBody JournalEntry myEntry) {
-        return null;
+    public JournalEntry updateJournalById(@PathVariable ObjectId id, @RequestBody JournalEntry newEntry) {
+       JournalEntry old = jounrnalEnrtyService.findById(id).orElse(null);
+       if (old!=null){
+           old.setTitle(newEntry.getTitle()!=null&& !newEntry.getTitle().equals("")?newEntry.getTitle():old.getTitle());
+           old.setContent(newEntry.getContent()!=null&& !newEntry.equals(" ")?newEntry.getContent():old.getContent());
+       }
+
+
+        jounrnalEnrtyService.saveEntry(old);
+        return old;
     }
 
 }
